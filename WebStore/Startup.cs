@@ -20,7 +20,10 @@ namespace WebStore
             this.Configuration = Configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services) { }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc();
+        }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -29,11 +32,20 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
-            var response = Configuration["CustomClientResponse"];
+            app.UseStaticFiles();
 
-            app.Run(async (context) =>
+            //var response = Configuration["CustomClientResponse"];
+
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync(response);
+            //});
+
+            app.UseMvc(route =>
             {
-                await context.Response.WriteAsync(response);
+                route.MapRoute(
+                    name:"default",
+                    template:"{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
