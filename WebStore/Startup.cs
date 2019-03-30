@@ -34,13 +34,6 @@ namespace WebStore
 
             app.UseStaticFiles();
 
-            //var response = Configuration["CustomClientResponse"];
-
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync(response);
-            //});
-
             app.UseMvc(route =>
             {
                 route.MapRoute(
