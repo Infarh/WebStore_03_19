@@ -12,14 +12,13 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" style="display: none">
                     <div class="social-icons pull-right">
                         <ul class="nav navbar-nav">
                             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                             <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                             <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                             <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -62,8 +61,8 @@
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-                            <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+                            <li><a href="#"><i class="fa fa-user"></i> Профиль</a></li>
+                            <li><a href="#"><i class="fa fa-star"></i> Список желаний</a></li>
                             <li><a asp-controller="Home" asp-action="Checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                             <li><a asp-controller="Home" asp-action="Cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                             <li><a asp-controller="Home" asp-action="Login"><i class="fa fa-lock"></i> Login</a></li>
@@ -89,33 +88,33 @@
                     </div>
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
-                            <li><a asp-controller="Home" asp-action="Index" class="active">Home</a></li>
+                            <li><a asp-controller="Home" asp-action="Index" class="active">Главная</a></li>
                             <li class="dropdown">
-                                <a href="#">Shop<i class="fa fa-angle-down"></i></a>
+                                <a href="#">Магазин<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a asp-controller="Home" asp-action="Shop">Products</a></li>
-                                    <li><a asp-controller="Home" asp-action="ProductDetails">Product Details</a></li>
-                                    <li><a asp-controller="Home" asp-action="Checkout">Checkout</a></li>
-                                    <li><a asp-controller="Home" asp-action="Cart">Cart</a></li>
-                                    <li><a asp-controller="Home" asp-action="Login">Login</a></li>
+                                    <li><a asp-controller="Home" asp-action="Shop">Товары</a></li>
+                                    <li><a asp-controller="Home" asp-action="ProductDetails">Детали товара</a></li>
+                                    <li><a asp-controller="Home" asp-action="Checkout">Оформление заказа</a></li>
+                                    <li><a asp-controller="Home" asp-action="Cart">Корзина</a></li>
+                                    <li><a asp-controller="Home" asp-action="Login">Вход</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown">
                                 <a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a asp-controller="Home" asp-action="Blog">Blog List</a></li>
-                                    <li><a asp-controller="Home" asp-action="BlogSingle">Blog Single</a></li>
+                                    <li><a asp-controller="Home" asp-action="Blog">Список блогов</a></li>
+                                    <li><a asp-controller="Home" asp-action="BlogSingle">Блог</a></li>
                                 </ul>
                             </li>
-                            <li><a asp-controller="Home" asp-action="NotFound">404</a></li>
-                            <li><a asp-controller="Home" asp-action="ContactUs">Contact</a></li>
-                            <li><a asp-controller="Employes" asp-action="Index">Employes</a></li>
+                            <li><a asp-controller="Home" asp-action="NotFound">Ошибка 404</a></li>
+                            <li><a asp-controller="Home" asp-action="ContactUs">Контакты</a></li>
+                            <li><a asp-controller="Employes" asp-action="Index">Сотрудники</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="search_box pull-right">
-                        <input type="text" placeholder="Search" />
+                        <input type="text" placeholder="Поиск" />
                     </div>
                 </div>
             </div>
