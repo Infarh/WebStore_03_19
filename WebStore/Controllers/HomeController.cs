@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Infrastructure.Filters;
 
 namespace WebStore.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index() => View();
+        //[ActionFilterAsync]
+        public IActionResult Index()
+        {
+            //throw new ApplicationException("Hello!!!111");
+            return View();
+        }
 
         public IActionResult Shop() => View();
 
@@ -26,6 +32,6 @@ namespace WebStore.Controllers
 
         public IActionResult BlogSingle() => View();
 
-        public IActionResult NotFound() => View();
+        public IActionResult Error404() => View();
     }
 }
