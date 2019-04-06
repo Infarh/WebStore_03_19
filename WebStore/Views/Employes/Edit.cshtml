@@ -12,6 +12,7 @@
     <div class="col-md-4">
         <form method="post" asp-controller="Employes" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*@Html.ValidationSummary(false, "Ошибка!", new { @class = "text-danger" })*@
 
             <input asp-for="Id" type="hidden" />
 
@@ -19,6 +20,7 @@
                 <label asp-for="SurName" class="control-label"></label>
                 <input asp-for="SurName" class="form-control" />
                 <span asp-validation-for="SurName" class="text-danger"></span>
+                @*@Html.ValidationMessageFor(m => m.SurName, "Ошибка!", new { @class = "text-danger" })*@
             </div>
 
             <div class="form-group">
@@ -49,3 +51,7 @@
 <div>
     <a asp-controller="Employes" asp-action="Index">Назад к списку</a>
 </div>
+
+@section Scripts{ 
+    @await Html.PartialAsync("_ValidationScripsPartial")
+}

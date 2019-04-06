@@ -13,7 +13,7 @@ namespace WebStore.Models
         public int Id { get; set; }
 
         [Display(Name = "Имя"), Required(ErrorMessage = "Имя является обязательным")]
-        [MinLength(3)]
+        [RegularExpression(@"(^[А-Я][а-я]{2,150}$)|(^[A-Z][a-z]{2,150}$)", ErrorMessage = "Некорректный формат имени")]
         public string FirstName { get; set; }
 
         [Display(Name = "Фамилия"), Required(ErrorMessage = "Фамилия является обязательной")]
@@ -24,6 +24,7 @@ namespace WebStore.Models
         public string Patronymic { get; set; }
 
         [Display(Name = "Возраст")]
+        [Range(18, 130)]
         public int Age { get; set; }
     }
 }

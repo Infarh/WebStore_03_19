@@ -16,8 +16,6 @@ namespace WebStore.Controllers
             return View();
         }
 
-        public IActionResult Shop() => View();
-
         public IActionResult ProductDetails() => View();
 
         public IActionResult Login() => View();

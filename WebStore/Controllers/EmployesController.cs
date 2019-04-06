@@ -56,8 +56,8 @@ namespace WebStore.Controllers
             if (employee.Age > 120)
                 ModelState.AddModelError("Age", "Странный возраст");
 
-            if(employee.Age % 2 == 0)
-                ModelState.AddModelError("", "Чётный возраст");
+            //if(employee.Age % 2 == 0)
+            //    ModelState.AddModelError("", "Чётный возраст");
 
             if (!ModelState.IsValid) return View(employee);
 

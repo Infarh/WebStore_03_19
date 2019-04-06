@@ -26,7 +26,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "font-awesome@4.0.3",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
@@ -37,6 +36,21 @@
         "fonts/fontawesome-webfont.ttf",
         "fonts/fontawesome-webfont.woff",
         "fonts/FontAwesome.otf"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "jquery-validate@1.19.0",
+      "destination": "wwwroot/lib/jquery-validate/",
+      "files": [
+        "jquery.validate.min.js",
+        "localization/messages_ru.min.js",
+        "jquery.validate.js",
+        "additional-methods.min.js",
+        "additional-methods.js"
       ]
     }
   ]
