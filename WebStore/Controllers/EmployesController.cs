@@ -20,6 +20,7 @@ namespace WebStore.Controllers
         }
 
         //[Route("Info/{id}")]
+        //[ActionName("EmployesDetails")]
         public IActionResult Details(int id)
         {
             var employe = _EmployeesData.GetById(id);
@@ -49,6 +50,15 @@ namespace WebStore.Controllers
         [HttpPost]
         public IActionResult Edit(Employee employee)
         {
+            if(employee.Age < 18)
+                ModelState.AddModelError("Age", "Возраст слишком маленький");
+
+            if (employee.Age > 120)
+                ModelState.AddModelError("Age", "Странный возраст");
+
+            if(employee.Age % 2 == 0)
+                ModelState.AddModelError("", "Чётный возраст");
+
             if (!ModelState.IsValid) return View(employee);
 
             if (employee.Id > 0)
