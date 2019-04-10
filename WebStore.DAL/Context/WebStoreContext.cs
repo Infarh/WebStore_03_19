@@ -19,5 +19,15 @@ namespace WebStore.DAL.Context
         {
 
         }
+
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
+
+        //    builder.Entity<Section>()
+        //        .HasMany(section => section.Products)
+        //        .WithOne(product => product.Section)
+        //        .HasForeignKey(product => product.SectionId);
+        //}
     }
 }
