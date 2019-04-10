@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Map;
 using WebStore.ViewModels;
 
 namespace WebStore.Components
@@ -31,24 +32,14 @@ namespace WebStore.Components
 
             var parent_sections = sections
                 .Where(section => section.ParentId == null)
-                .Select(section => new SectionViewModel
-                {
-                    Id = section.Id,
-                    Name = section.Name,
-                    Order = section.Order
-                })
+                .Select(SectionViewModelMapper.CreateViewModel)
                 .ToList();
 
             foreach (var parent_section in parent_sections)
             {
                 var child_sections = sections
                     .Where(section => section.ParentId == parent_section.Id)
-                    .Select(section => new SectionViewModel
-                    {
-                        Id = section.Id,
-                        Name = section.Name,
-                        Order = section.Order
-                    });
+                    .Select(SectionViewModelMapper.CreateViewModel);
                 parent_section.ChildSections.AddRange(child_sections);
                 parent_section.ChildSections.Sort((a,b) => Comparer<int>.Default.Compare(a.Order, b.Order));
             }
