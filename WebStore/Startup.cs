@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebStore.DAL.Context;
 using WebStore.Data;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Filters;
 using WebStore.Infrastructure.Implementations;
@@ -36,6 +38,42 @@ namespace WebStore
             //services.AddScoped<>()
             //services.AddTransient<>();
 
+            services.AddIdentity<User, IdentityRole>(options =>
+                {
+                    // конфигурация cookies возможна здесь
+                })
+                .AddEntityFrameworkStores<WebStoreContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(cfg =>
+            {
+                cfg.Password.RequiredLength = 3;
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireUppercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequiredUniqueChars = 3;
+
+                cfg.Lockout.MaxFailedAccessAttempts = 10;
+                cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                cfg.Lockout.AllowedForNewUsers = true;
+
+                cfg.User.RequireUniqueEmail = false; // грабли!
+            });
+
+            services.ConfigureApplicationCookie(cfg =>
+            {
+                cfg.Cookie.HttpOnly = true;
+                cfg.Cookie.Expiration = TimeSpan.FromDays(150);
+                cfg.Cookie.MaxAge = TimeSpan.FromDays(150);
+
+                cfg.LoginPath = "/Account/Login";
+                cfg.LogoutPath = "/Account/Logout";
+                cfg.AccessDeniedPath = "/Account/AccessDenied";
+
+                cfg.SlidingExpiration = true;
+            });
+
             services.AddMvc(opt =>
             {
                 //opt.Filters.Add<ActionFilter>();
@@ -54,8 +92,11 @@ namespace WebStore
             }
 
             app.UseStaticFiles();
+            app.UseDefaultFiles();
 
             //app.UseWelcomePage("/Welcome");
+
+            app.UseAuthentication();
 
             //app.UseMvcWithDefaultRoute(); // "default" : "{controller=Home}/{action=Index}/{id?}"
             app.UseMvc(route =>
