@@ -13,7 +13,7 @@ namespace WebStore.Models
         public int Id { get; set; }
 
         [Display(Name = "Имя"), Required(ErrorMessage = "Имя является обязательным")]
-        [RegularExpression(@"(^[А-Я][а-я]{2,150}$)|(^[A-Z][a-z]{2,150}$)", ErrorMessage = "Некорректный формат имени")]
+        [RegularExpression(@"(^[А-ЯЁ][а-яё]{2,150}$)|(^[A-Z][a-z]{2,150}$)", ErrorMessage = "Некорректный формат имени")]
         public string FirstName { get; set; }
 
         [Display(Name = "Фамилия"), Required(ErrorMessage = "Фамилия является обязательной")]
