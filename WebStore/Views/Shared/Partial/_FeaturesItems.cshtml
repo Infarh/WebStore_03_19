@@ -3,7 +3,7 @@
 <div class="features_items">
     <!--features_items-->
     <h2 class="title text-center">Features Items</h2>
-    
+
     @foreach (var product in Model)
     {
         <div class="col-sm-4">
@@ -13,13 +13,19 @@
                         <img src="~/images/shop/@product.ImageUrl" alt="@product.Name" />
                         <h2>@product.Price.ToString("C")</h2>
                         <p>@product.Name</p>
-                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Добавить в корзину</a>
+                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id"
+                           class="btn btn-default add-to-cart">
+                            <i class="fa fa-shopping-cart"></i>Добавить в корзину
+                        </a>
                     </div>
                     <div class="product-overlay">
                         <div class="overlay-content">
                             <h2>@product.Price.ToString("C")</h2>
-                            <p>@product.Name</p>
-                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Добавить в корзину</a>
+                            <p><a asp-controller="Catalog" asp-action="ProductDetails" asp-route-id="@product.Id">@product.Name</a></p>
+                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id"
+                               class="btn btn-default add-to-cart">
+                                <i class="fa fa-shopping-cart"></i>Добавить в корзину
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -32,38 +38,4 @@
             </div>
         </div>
     }
-
-    @*@for (var i = 1; i <= 6; i++)
-    {
-        var image_url = $"/images/home/product{i}.jpg";
-        var product_name = $"Товар {i}";
-        var product_price = rnd.Next(10, 101);
-
-        <div class="col-sm-4">
-            <div class="product-image-wrapper">
-                <div class="single-products">
-                    <div class="productinfo text-center">
-                        <img src="@image_url" alt="" />
-                        <h2>@(product_price.ToString("C"))</h2>
-                        <p>@product_name</p>
-                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Добавить в корзину</a>
-                    </div>
-                    <div class="product-overlay">
-                        <div class="overlay-content">
-                            <h2>@(product_price.ToString("C"))</h2>
-                            <p>@product_name</p>
-                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Добавить в корзину</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="choose">
-                    <ul class="nav nav-pills nav-justified">
-                        <li><a href="#"><i class="fa fa-plus-square"></i>Добавить в список желаний</a></li>
-                        <li><a href="#"><i class="fa fa-plus-square"></i>Добавить к сравнению</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    }*@
-
 </div><!--features_items-->
