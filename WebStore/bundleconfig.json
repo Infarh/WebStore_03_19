@@ -13,8 +13,8 @@
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
       "wwwroot/js/main.js",
-      "wwwroot/js/price-range.js"//,
-      //"wwwroot/js/jquery.prettyPhoto.js"
+      "wwwroot/js/price-range.js",
+      "wwwroot/js/jquery.prettyPhoto.js"
     ],
     "minify": {
       "enabled": true,
