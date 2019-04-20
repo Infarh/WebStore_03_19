@@ -2,16 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Domain.Entities;
+using WebStore.Infrastructure.Interfaces;
 
 namespace WebStore.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize(Roles = Domain.Entities.User.RoleAdmin)]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IProductData _ProductData;
+
+        public HomeController(IProductData ProductData)
         {
-            return View();
+            _ProductData = ProductData;
         }
+
+        public IActionResult Index() => View();
+
+        public IActionResult ProductList() => View(_ProductData.GetProducts(new ProductFilter()));
     }
 }
