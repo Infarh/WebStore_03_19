@@ -22,11 +22,11 @@ namespace WebStore.Infrastructure.Implementations
             _UserManager = UserManager;
         }
 
-        public IEnumerable<Order> GetUserOrders(User user) =>
+        public IEnumerable<Order> GetUserOrders(string UserName) =>
             _db.Orders
                 .Include(order => order.User)
                 .Include(order => order.OrderItems)
-                .Where(order => order.User.UserName == user.UserName)
+                .Where(order => order.User.UserName == UserName)
                 .ToArray();
 
         public Order GetOrderById(int id)
