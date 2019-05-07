@@ -17,9 +17,11 @@ using WebStore.Domain.Entities;
 using WebStore.Domain.Models;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Filters;
-using WebStore.Infrastructure.Implementations;
+using WebStore.Services;
 using WebStore.Interfaces.Api;
 using WebStore.Interfaces.Servcies;
+using WebStore.Services.InMemory;
+using WebStore.Services.Sql;
 
 namespace WebStore
 {
