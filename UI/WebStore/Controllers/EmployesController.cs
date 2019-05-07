@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Models;
+using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Servcies;
 
 namespace WebStore.Controllers
@@ -48,12 +49,18 @@ namespace WebStore.Controllers
                 employee = new Employee();
             }
 
-            return View(employee);
+            return View(new EmployeeView
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                SurName = employee.SurName,
+                Age = employee.Age
+            });
         }
 
         [HttpPost]
         [Authorize(Roles = Domain.Entities.User.RoleAdmin)]
-        public IActionResult Edit(Employee employee, [FromServices] IMapper mapper)
+        public IActionResult Edit(EmployeeView employee, [FromServices] IMapper mapper)
         {
             if(employee.Age < 18)
                 ModelState.AddModelError("Age", "Возраст слишком маленький");

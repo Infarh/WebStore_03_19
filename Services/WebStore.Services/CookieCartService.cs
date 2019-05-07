@@ -9,7 +9,7 @@ using WebStore.Domain.Models;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Servcies;
 
-namespace WebStore.Infrastructure.Implementations
+namespace WebStore.Services
 {
     public class CookieCartService : ICartService
     {

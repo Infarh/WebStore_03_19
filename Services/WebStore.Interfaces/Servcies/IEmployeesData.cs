@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WebStore.Domain.Models;
+using WebStore.Domain.ViewModels;
 
 namespace WebStore.Interfaces.Servcies
 {
@@ -9,9 +10,11 @@ namespace WebStore.Interfaces.Servcies
 
         Employee GetById(int id);
 
-        void AddNew(Employee employee);
+        void AddNew(EmployeeView employee);
 
         void Delete(int id);
+
+        EmployeeView UpdateEmployee(int id, EmployeeView Employee);
 
         void SaveChanges();
     }
