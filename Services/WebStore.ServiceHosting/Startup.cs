@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebStore.DAL.Context;
+using WebStore.Domain.Entities;
 using WebStore.Interfaces.Servcies;
 using WebStore.Services;
 using WebStore.Services.InMemory;
@@ -31,6 +33,10 @@ namespace WebStore.ServiceHosting
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddIdentity<User, IdentityRole>()
+               .AddEntityFrameworkStores<WebStoreContext>()
+               .AddDefaultTokenProviders();
 
             services.AddDbContext<WebStoreContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
 

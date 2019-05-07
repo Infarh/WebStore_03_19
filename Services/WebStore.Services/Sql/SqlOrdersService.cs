@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
+using WebStore.Domain.DTO;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Servcies;
@@ -21,19 +22,48 @@ namespace WebStore.Services.Sql
             _UserManager = UserManager;
         }
 
-        public IEnumerable<Order> GetUserOrders(string UserName) =>
+        public IEnumerable<OrderDTO> GetUserOrders(string UserName) =>
             _db.Orders
                 .Include(order => order.User)
                 .Include(order => order.OrderItems)
                 .Where(order => order.User.UserName == UserName)
+                .Select(order => new OrderDTO
+                {
+                    Id = order.Id,
+                    Name = order.Name,
+                    Address = order.Address,
+                    Phone = order.Phone,
+                    Date = order.Date,
+                    OrderItems = order.OrderItems.Select(item => new OrderItemDTO
+                    {
+                        Id = item.Id,
+                        Price = item.Price,
+                        Quantity = item.Quantity
+                    }).ToArray()
+                })
                 .ToArray();
 
-        public Order GetOrderById(int id)
+        public OrderDTO GetOrderById(int id)
         {
-            return _db.Orders.Include(o => o.OrderItems).FirstOrDefault(o => o.Id == id);
+            var order = _db.Orders.Include(o => o.OrderItems).FirstOrDefault(o => o.Id == id);
+            if (order is null) return null;
+            return new OrderDTO
+            {
+                Id = order.Id,
+                Name = order.Name,
+                Address = order.Address,
+                Phone = order.Phone,
+                Date = order.Date,
+                OrderItems = order.OrderItems.Select(item => new OrderItemDTO
+                {
+                    Id = item.Id,
+                    Price = item.Price,
+                    Quantity = item.Quantity
+                }).ToArray()
+            };
         }
 
-        public Order CreateOrder(OrderViewModel OrderModel, CartViewModel CartModel, string UserName)
+        public OrderDTO CreateOrder(CreateOrderModel OrderModel, string UserName)
         {
             var user = _UserManager.FindByNameAsync(UserName).Result;
 
@@ -41,29 +71,27 @@ namespace WebStore.Services.Sql
             {
                 var order = new Order
                 {
-                    Name = OrderModel.Name,
-                    Address = OrderModel.Address,
-                    Phone = OrderModel.Phone,
+                    Name = OrderModel.OrderViewModel.Name,
+                    Address = OrderModel.OrderViewModel.Address,
+                    Phone = OrderModel.OrderViewModel.Phone,
                     User = user,
                     Date = DateTime.Now
                 };
 
                 _db.Orders.Add(order);
 
-                foreach (var item in CartModel.Items)
+                foreach (var item in OrderModel.OrderItems)
                 {
-                    var product_model = item.Key;
-                    var quantity = item.Value;
 
-                    var product = _db.Products.FirstOrDefault(p => p.Id == product_model.Id);
+                    var product = _db.Products.FirstOrDefault(p => p.Id == item.Id);
                     if(product is null)
-                        throw new InvalidOperationException($"Товар с идентификатором {product_model.Id} в базе данных не найден");
+                        throw new InvalidOperationException($"Товар с идентификатором {item.Id} в базе данных не найден");
 
                     var order_item = new OrderItem
                     {
                         Order = order,
                         Price = product.Price,
-                        Quantity = quantity,
+                        Quantity = item.Quantity,
                         Product = product
                     };
 
@@ -73,7 +101,20 @@ namespace WebStore.Services.Sql
                 _db.SaveChanges();
                 transaction.Commit();
 
-                return order;
+                return new OrderDTO
+                {
+                    Id = order.Id,
+                    Name = order.Name,
+                    Address = order.Address,
+                    Phone = order.Phone,
+                    Date = order.Date,
+                    OrderItems = order.OrderItems.Select(item => new OrderItemDTO
+                    {
+                        Id = item.Id,
+                        Price = item.Price,
+                        Quantity = item.Quantity
+                    }).ToArray()
+                };
             }
         }
     }
