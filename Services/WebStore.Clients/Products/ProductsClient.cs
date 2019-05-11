@@ -14,21 +14,15 @@ namespace WebStore.Clients.Products
     {
         public ProductsClient(IConfiguration Configuration) : base(Configuration, "api/products") { }
 
-        public IEnumerable<Section> GetSections()
-        {
-            return Get<List<Section>>($"{ServiceAddress}/sections");
-        }
+        public IEnumerable<Section> GetSections() => Get<List<Section>>($"{ServiceAddress}/sections");
 
-        public IEnumerable<Brand> GetBrands()
-        {
-            return Get<List<Brand>>($"{ServiceAddress}/brands");
-        }
+        public IEnumerable<Brand> GetBrands() => Get<List<Brand>>($"{ServiceAddress}/brands");
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
-        {
-            var response = Post(ServiceAddress, Filter);
-            return response.Content.ReadAsAsync<List<ProductDTO>>().Result;
-        }
+        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter) => 
+            Post(ServiceAddress, Filter)
+               .Content
+               .ReadAsAsync<List<ProductDTO>>()
+               .Result;
 
         public ProductDTO GetProductById(int id) => Get<ProductDTO>($"{ServiceAddress}/{id}");
     }

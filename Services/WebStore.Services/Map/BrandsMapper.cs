@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using WebStore.Domain.DTO;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 
-namespace WebStore.Infrastructure.Map
+namespace WebStore.Services.Map
 {
-    public static class BrandsViewModelMapper
+    public static class BrandsMapper
     {
         public static void CopyTo(this BrandViewModel Model, Brand brand)
         {
@@ -36,5 +33,17 @@ namespace WebStore.Infrastructure.Map
             brand.CopyTo(model, ProductsCount);
             return model;
         }
+
+        public static BrandDTO ToDTO(this Brand brand) => brand is null ? null : new BrandDTO
+        {
+            Id = brand.Id,
+            Name = brand.Name
+        };
+
+        public static Brand FromDTO(this BrandDTO brand) => brand is null ? null : new Brand
+        {
+            Id = brand.Id,
+            Name = brand.Name
+        };
     }
 }

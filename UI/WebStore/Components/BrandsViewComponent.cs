@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.ViewModels;
-using WebStore.Infrastructure.Map;
 using WebStore.Interfaces.Servcies;
+using WebStore.Services.Map;
 
 namespace WebStore.Components
 {

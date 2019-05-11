@@ -4,6 +4,7 @@ using System.Linq;
 using WebStore.Domain.Models;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Servcies;
+using WebStore.Services.Map;
 
 namespace WebStore.Services.InMemory
 {
@@ -22,26 +23,19 @@ namespace WebStore.Services.InMemory
 
         public void AddNew(EmployeeView employee)
         {
-            if (employee is null) throw new ArgumentNullException(nameof(employee));
+            if (employee is null)
+                throw new ArgumentNullException(nameof(employee));
 
-            if (_Employes.Any(e => e.Id == employee.Id)) return;
+            if (_Employes.Any(e => e.Id == employee.Id))
+                return;
 
-            employee.Id = _Employes.Count == 0 ? 1 : _Employes.Max(e => e.Id) + 1;
-            _Employes.Add(new Employee
-            {
-                Id = employee.Id,
-                FirstName = employee.FirstName,
-                SurName = employee.SurName,
-                Patronymic = employee.Patronymic,
-                Age = employee.Age
-            });
+            _Employes.Add(employee.FromViewModel(_Employes.Count == 0 ? 1 : _Employes.Max(e => e.Id) + 1));
         }
 
         public void Delete(int id)
         {
             var employee = GetById(id);
             if (employee is null) return;
-            //if(ReferenceEquals(employee, null)) return;
             _Employes.Remove(employee);
         }
 
@@ -54,10 +48,7 @@ namespace WebStore.Services.InMemory
             if (db_employee is null)
                 throw new InvalidOperationException($"Сотрудник с идентификатором {id} не найден");
 
-            db_employee.FirstName = Employee.FirstName;
-            db_employee.SurName = Employee.SurName;
-            db_employee.Patronymic = Employee.Patronymic;
-            db_employee.Age = Employee.Age;
+            Employee.MapTo(db_employee);
 
             return Employee;
         }
