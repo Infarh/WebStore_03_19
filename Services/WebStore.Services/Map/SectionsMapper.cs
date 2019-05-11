@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebStore.Domain.Entities;
+﻿using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 
-namespace WebStore.Infrastructure.Map
+namespace WebStore.Services.Map
 {
-    public static class SectionViewModelMapper
+    public static class SectionsMapper
     {
         public static void CopyTo(this Section section, SectionViewModel model)
         {

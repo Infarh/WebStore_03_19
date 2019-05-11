@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
-using WebStore.Infrastructure.Map;
 using WebStore.Interfaces.Servcies;
+using WebStore.Services.Map;
 
 namespace WebStore.Controllers
 {
@@ -40,7 +40,7 @@ namespace WebStore.Controllers
                         Price = p.Price,
                         ImageUrl = p.ImageUrl
                     })
-                   .Select(ProductViewModelMapper.CreateViewModel)
+                   .Select(ProductsMapper.CreateViewModel)
             };
 
             return View(catalog_model);
