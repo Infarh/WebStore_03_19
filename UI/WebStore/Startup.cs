@@ -13,9 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using WebStore.Clients.Employees;
 using WebStore.Clients.Orders;
 using WebStore.Clients.Products;
+using WebStore.Clients.Users;
 using WebStore.Clients.Values;
 using WebStore.DAL.Context;
-using WebStore.Data;
 using WebStore.Domain.Entities;
 using WebStore.Domain.Models;
 using WebStore.Infrastructure.Conventions;
@@ -23,6 +23,7 @@ using WebStore.Infrastructure.Filters;
 using WebStore.Services;
 using WebStore.Interfaces.Api;
 using WebStore.Interfaces.Servcies;
+using WebStore.Services.Data;
 using WebStore.Services.InMemory;
 using WebStore.Services.Sql;
 
@@ -37,27 +38,31 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
-            services.AddTransient<WebStoreContextInitializer>();
-
             services.AddSingleton<IEmployeesData, EmployeesClient>();
-            //services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
-            //services.AddSingleton<IProductData, InMemoryProductData>();
-            //services.AddScoped<IProductData, SqlProductData>();
             services.AddScoped<IProductData, ProductsClient>();
             services.AddScoped<ICartService, CookieCartService>();
-            //services.AddScoped<IOrderService, SqlOrdersService>();
             services.AddScoped<IOrderService, OrdersClient>();
 
             services.AddTransient<IValuesService, ValuesClient>();
 
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    // конфигурация cookies возможна здесь
-                })
-                .AddEntityFrameworkStores<WebStoreContext>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddDefaultTokenProviders();
+
+            #region CustomIdentity implementation
+
+            services.AddTransient<IUserStore<User>, UsersClient>();
+            services.AddTransient<IUserRoleStore<User>, UsersClient>();
+            services.AddTransient<IUserClaimStore<User>, UsersClient>();
+            services.AddTransient<IUserPasswordStore<User>, UsersClient>();
+            services.AddTransient<IUserTwoFactorStore<User>, UsersClient>();
+            services.AddTransient<IUserEmailStore<User>, UsersClient>();
+            services.AddTransient<IUserPhoneNumberStore<User>, UsersClient>();
+            services.AddTransient<IUserLoginStore<User>, UsersClient>();
+            services.AddTransient<IUserLockoutStore<User>, UsersClient>();
+
+            services.AddTransient<IRoleStore<IdentityRole>, RolesClient>();
+
+            #endregion
 
             services.Configure<IdentityOptions>(cfg =>
             {
@@ -94,10 +99,10 @@ namespace WebStore
                 //opt.Conventions.Add(new TestConvention());
             });
 
-            services.AddAutoMapper(opt =>
-            {
-                opt.CreateMap<Employee, Employee>();
-            });
+            //services.AddAutoMapper(opt =>
+            //{
+            //    opt.CreateMap<Employee, Employee>();
+            //});
 
             //AutoMapper.Mapper.Initialize(opt =>
             //{
@@ -105,9 +110,9 @@ namespace WebStore
             //});
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env/*, WebStoreContextInitializer db*/)
         {
-            db.InitializeAsync().Wait();
+            //db.InitializeAsync().Wait();
 
             if (env.IsDevelopment())
             {
