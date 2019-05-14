@@ -14,15 +14,15 @@ using WebStore.Domain.Entities;
 
 namespace WebStore.ServiceHosting.Controllers
 {
-    //[Route("api/[controller]")]
-    [Route("api/users")]
-    [ApiController]
-    [Produces("application/json")]
+    [ApiController, Route("api/[controller]"), Produces("application/json")]
     public class UsersController : ControllerBase
     {
         private readonly UserStore<User> _UserStore;
 
         public UsersController(WebStoreContext db) => _UserStore = new UserStore<User>(db);
+
+        [HttpGet("Test")]
+        public string TestGet() => "Test";
 
         [HttpPost("UserId")]
         public async Task<string> GetUserIdAsync([FromBody] User user) => await _UserStore.GetUserIdAsync(user);
@@ -174,6 +174,5 @@ namespace WebStore.ServiceHosting.Controllers
 
         [HttpPost("SetLockoutEnabled/{enable}")]
         public async Task SetLockoutEnabledAsync([FromBody] User user, bool enable) => await _UserStore.SetLockoutEnabledAsync(user, enable);
-
     }
 }

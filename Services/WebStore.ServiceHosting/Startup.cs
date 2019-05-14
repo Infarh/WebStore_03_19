@@ -17,6 +17,7 @@ using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Servcies;
 using WebStore.Services;
+using WebStore.Services.Data;
 using WebStore.Services.InMemory;
 using WebStore.Services.Sql;
 
@@ -35,13 +36,14 @@ namespace WebStore.ServiceHosting
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" }));
+            //services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" }));
 
             services.AddIdentity<User, IdentityRole>()
                .AddEntityFrameworkStores<WebStoreContext>()
                .AddDefaultTokenProviders();
 
             services.AddDbContext<WebStoreContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
+            services.AddTransient<WebStoreContextInitializer>();
 
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             services.AddScoped<IProductData, SqlProductData>();
@@ -51,19 +53,21 @@ namespace WebStore.ServiceHosting
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
         {
+            db.InitializeAsync().Wait();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(opt =>
-            {
-                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
-                opt.RoutePrefix = string.Empty;
-            });
+            //app.UseSwagger();
+            //app.UseSwaggerUI(opt =>
+            //{
+            //    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
+            //    opt.RoutePrefix = string.Empty;
+            //});
 
             app.UseMvc();
         }
