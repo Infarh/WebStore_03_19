@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.Domain.DTO;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Servcies;
@@ -17,8 +18,13 @@ namespace WebStore.ServiceHosting.Controllers
     public class OrdersApiController : ControllerBase, IOrderService
     {
         private readonly IOrderService _OrderService;
+        private readonly ILogger<OrdersApiController> _Logger;
 
-        public OrdersApiController(IOrderService OrderService) => _OrderService = OrderService;
+        public OrdersApiController(IOrderService OrderService, ILogger<OrdersApiController> Logger)
+        {
+            _OrderService = OrderService;
+            _Logger = Logger;
+        }
 
         [HttpGet("user/{UserName}")]
         public IEnumerable<OrderDTO> GetUserOrders(string UserName) => _OrderService.GetUserOrders(UserName);
@@ -27,6 +33,10 @@ namespace WebStore.ServiceHosting.Controllers
         public OrderDTO GetOrderById(int id) => _OrderService.GetOrderById(id);
 
         [HttpPost("{UserName?}")]
-        public OrderDTO CreateOrder([FromBody] CreateOrderModel OrderModel, string UserName) => _OrderService.CreateOrder(OrderModel, UserName);
+        public OrderDTO CreateOrder([FromBody] CreateOrderModel OrderModel, string UserName)
+        {
+            _Logger.LogInformation("Создание заказа для {0}", UserName);
+            return _OrderService.CreateOrder(OrderModel, UserName);
+        }
     }
 }

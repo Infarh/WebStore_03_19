@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 
@@ -13,11 +14,13 @@ namespace WebStore.Controllers
     {
         private readonly UserManager<User> _UserManager;
         private readonly SignInManager<User> _SignInManager;
+        private readonly ILogger<AccountController> _Logger;
 
-        public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager)
+        public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager, ILogger<AccountController> Logger)
         {
             _UserManager = UserManager;
             _SignInManager = SignInManager;
+            _Logger = Logger;
         }
 
         public IActionResult Register() => View();
@@ -58,12 +61,15 @@ namespace WebStore.Controllers
 
             if (login_result.Succeeded)
             {
+                _Logger.LogInformation("Пользователь {0} успешно вошёл в систему", login.UserName);
+
                 if (Url.IsLocalUrl(login.ReturnUrl))
                     return Redirect(login.ReturnUrl);
                 return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError("", "Имя пользователя, или пароль неверны!");
+            _Logger.LogWarning("Неудачная попытка входа пользователя {0} в систему", login.UserName);
             return View(login);
         }
 
