@@ -52,10 +52,7 @@ namespace WebStore
 
             services.AddTransient<IValuesService, ValuesClient>();
 
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    // конфигурация cookies возможна здесь
-                })
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<WebStoreContext>()
                 .AddDefaultTokenProviders();
 
