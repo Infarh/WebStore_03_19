@@ -14,11 +14,13 @@ namespace WebStore.Controllers
     {
         private readonly UserManager<User> _UserManager;
         private readonly SignInManager<User> _SignInManager;
+        private readonly ILogger<AccountController> _Logger;
 
-        public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager)
+        public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager, ILogger<AccountController> Logger)
         {
             _UserManager = UserManager;
             _SignInManager = SignInManager;
+            _Logger = Logger;
         }
 
         public IActionResult Register() => View();
@@ -37,10 +39,16 @@ namespace WebStore.Controllers
             var creation_result = await _UserManager.CreateAsync(new_user, model.Password);
             if (creation_result.Succeeded) // Если получилось
             {
+                _Logger.LogInformation("Пользователь {0} зарегистрирован", new_user.UserName);
                 await _SignInManager.SignInAsync(new_user, false); // То сразу логиним его на сайте
                  
+                _Logger.LogInformation("Пользователь {0} вошёл в систему", new_user.UserName);
                 return RedirectToAction("Index", "Home"); // и отправляем на главную страницу
             }
+
+            _Logger.LogWarning("При регистрации пользователя {0} возникли ошибки: {1}", 
+                model.UserName, 
+                string.Join(",", creation_result.Errors.Select(e => e.Description)));
 
             foreach (var error in creation_result.Errors)         // Если что-то пошло не так...
                 ModelState.AddModelError("", error.Description);  // Все ошибки заносим в состояние модели
@@ -59,18 +67,22 @@ namespace WebStore.Controllers
 
             if (login_result.Succeeded)
             {
+                _Logger.LogInformation("Пользователь {0} вошёл в систему", login.UserName);
                 if (Url.IsLocalUrl(login.ReturnUrl))
                     return Redirect(login.ReturnUrl);
                 return RedirectToAction("Index", "Home");
             }
 
+            _Logger.LogWarning("Ошибка входа пользователя {0} в систему", login.UserName);
             ModelState.AddModelError("", "Имя пользователя, или пароль неверны!");
             return View(login);
         }
 
         public async Task<IActionResult> Logout()
         {
+            var user_name = User.Identity.Name;
             await _SignInManager.SignOutAsync();
+            _Logger.LogInformation("Пользователь {0} вышел из системы", user_name);
             return RedirectToAction("Index", "Home");
         }
 
