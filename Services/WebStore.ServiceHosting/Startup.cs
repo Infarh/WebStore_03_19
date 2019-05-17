@@ -36,7 +36,7 @@ namespace WebStore.ServiceHosting
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            //services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" }));
+            services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" }));
 
             services.AddIdentity<User, IdentityRole>()
                .AddEntityFrameworkStores<WebStoreContext>()
@@ -78,12 +78,12 @@ namespace WebStore.ServiceHosting
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseSwagger();
-            //app.UseSwaggerUI(opt =>
-            //{
-            //    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
-            //    opt.RoutePrefix = string.Empty;
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
+                opt.RoutePrefix = string.Empty;
+            });
 
             app.UseMvc();
         }

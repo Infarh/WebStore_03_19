@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
 
 namespace WebStore.ServiceHosting.Controllers
@@ -20,6 +21,9 @@ namespace WebStore.ServiceHosting.Controllers
         private readonly RoleStore<IdentityRole> _RoleStore;
 
         public RolesController(WebStoreContext db) => _RoleStore = new RoleStore<IdentityRole>(db);
+
+        [HttpGet("AllRoles")]
+        public async Task<IEnumerable<IdentityRole>> GetAllRoles() => await _RoleStore.Roles.ToArrayAsync();
 
         [HttpPost]
         public async Task<bool> CreateAsync(IdentityRole role) => (await _RoleStore.CreateAsync(role)).Succeeded;

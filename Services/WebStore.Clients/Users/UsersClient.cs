@@ -204,7 +204,7 @@ namespace WebStore.Clients.Users
 
         public async Task SetNormalizedEmailAsync(User user, string email, CancellationToken cancel)
         {
-            await PostAsync($"{ServiceAddress}/SetnormalizedEmail/{email}", user, cancel);
+            await PostAsync($"{ServiceAddress}/SetNormalizedEmail/{email}", user, cancel);
         }
 
         #endregion
