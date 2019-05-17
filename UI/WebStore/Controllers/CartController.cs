@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.Domain.DTO;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Servcies;
@@ -13,11 +14,13 @@ namespace WebStore.Controllers
     {
         private readonly ICartService _CartService;
         private readonly IOrderService _OrderService;
+        private readonly ILogger<CartController> _Logger;
 
-        public CartController(ICartService CartService, IOrderService OrderService)
+        public CartController(ICartService CartService, IOrderService OrderService, ILogger<CartController> Logger)
         {
             _CartService = CartService;
             _OrderService = OrderService;
+            _Logger = Logger;
         }
 
         public IActionResult Details()
@@ -64,22 +67,27 @@ namespace WebStore.Controllers
                     OrderViewModel = model
                 });
 
-            var create_order_model = new CreateOrderModel
+            using (_Logger.BeginScope("Оформление заказа для пользователя {0}", User.Identity.Name))
             {
-                OrderViewModel = model,
-                OrderItems = _CartService.TransformCart().Items.Select(item => new OrderItemDTO
+                var create_order_model = new CreateOrderModel
                 {
-                    Id = item.Key.Id,
-                    Price = item.Key.Price,
-                    Quantity = item.Value
-                }).ToList()
-            };
+                    OrderViewModel = model,
+                    OrderItems = _CartService.TransformCart().Items.Select(item => new OrderItemDTO
+                    {
+                        Id = item.Key.Id,
+                        Price = item.Key.Price,
+                        Quantity = item.Value
+                    }).ToList()
+                };
 
-            var order = _OrderService.CreateOrder(create_order_model, User.Identity.Name);
+                var order = _OrderService.CreateOrder(create_order_model, User.Identity.Name);
+                _Logger.LogInformation("Сформирован заказ id:{0}", order.Id);
 
-            _CartService.RemoveAll();
+                _CartService.RemoveAll();
+                _Logger.LogInformation("Корзина пользователя очищена", order.Id);
 
-            return RedirectToAction("OrderConfirmed", new { id = order.Id });
+                return RedirectToAction("OrderConfirmed", new { id = order.Id });
+            }                                
         }
 
         public IActionResult OrderConfirmed(int id)

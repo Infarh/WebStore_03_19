@@ -35,8 +35,12 @@ namespace WebStore.ServiceHosting.Controllers
         [HttpPost("{UserName?}")]
         public OrderDTO CreateOrder([FromBody] CreateOrderModel OrderModel, string UserName)
         {
-            _Logger.LogInformation("Создание заказа для {0}", UserName);
-            return _OrderService.CreateOrder(OrderModel, UserName);
+            using (_Logger.BeginScope("Создание заказа для {0}", UserName))
+            {
+                var order = _OrderService.CreateOrder(OrderModel, UserName);
+                _Logger.LogInformation("Заказ {0} для пользователя {1} успешно сформирован", order.Id, UserName);
+                return order;
+            }
         }
     }
 }

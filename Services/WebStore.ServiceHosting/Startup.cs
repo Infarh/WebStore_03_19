@@ -16,6 +16,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Servcies;
+using WebStore.Logger;
 using WebStore.Services;
 using WebStore.Services.Data;
 using WebStore.Services.InMemory;
@@ -69,8 +70,10 @@ namespace WebStore.ServiceHosting
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db, ILoggerFactory log)
         {
+            log.AddLog4Net();
+
             db.InitializeAsync().Wait();
 
             if (env.IsDevelopment())
