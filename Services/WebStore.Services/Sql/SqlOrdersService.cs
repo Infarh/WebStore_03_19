@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
 using WebStore.Domain.DTO;
 using WebStore.Domain.Entities;
@@ -15,11 +16,13 @@ namespace WebStore.Services.Sql
     {
         private readonly WebStoreContext _db;
         private readonly UserManager<User> _UserManager;
+        private readonly ILogger<SqlOrdersService> _Logger;
 
-        public SqlOrdersService(WebStoreContext db, UserManager<User> UserManager)
+        public SqlOrdersService(WebStoreContext db, UserManager<User> UserManager, ILogger<SqlOrdersService> Logger)
         {
             _db = db;
             _UserManager = UserManager;
+            _Logger = Logger;
         }
 
         public IEnumerable<OrderDTO> GetUserOrders(string UserName) =>
@@ -67,6 +70,8 @@ namespace WebStore.Services.Sql
         {
             var user = _UserManager.FindByNameAsync(UserName).Result;
 
+            //_Logger.LogInformation("Подготовка данынх заказа");
+
             using (var transaction = _db.Database.BeginTransaction())
             {
                 var order = new Order
@@ -100,6 +105,8 @@ namespace WebStore.Services.Sql
 
                 _db.SaveChanges();
                 transaction.Commit();
+
+                _Logger.LogInformation("Информация о заказе {0} внесена в БД", order.Id);
 
                 return new OrderDTO
                 {
