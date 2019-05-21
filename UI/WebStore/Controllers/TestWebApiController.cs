@@ -11,14 +11,8 @@ namespace WebStore.Controllers
     {
         private readonly IValuesService _ValuesService;
 
-        public TestWebApiController(IValuesService ValuesService)
-        {
-            _ValuesService = ValuesService;
-        }
+        public TestWebApiController(IValuesService ValuesService) => _ValuesService = ValuesService;
 
-        public IActionResult Index()
-        {
-            return View(_ValuesService.Get());
-        }
+        public async Task<IActionResult> Index() => View(await _ValuesService.GetAsync());
     }
 }
