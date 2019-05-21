@@ -14,12 +14,19 @@ namespace WebStore.Controllers
 
         public IActionResult ContactUs() => View();
 
-        public IActionResult Checkout() => View();
-
         public IActionResult Blog() => View();
 
         public IActionResult BlogSingle() => View();
 
-        public IActionResult Error404() => View();
+        public IActionResult ErrorStatus(string id)
+        {
+            switch (id)
+            {
+                case "404": return RedirectToAction("NotFoundPage");
+                default: return Content($"Статусный код ошибки {id}");
+            }
+        }
+
+        public IActionResult NotFoundPage() => View();
     }
 }
