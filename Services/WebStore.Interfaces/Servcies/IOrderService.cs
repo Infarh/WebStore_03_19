@@ -7,6 +7,8 @@ namespace WebStore.Interfaces.Servcies
 {
     public interface IOrderService
     {
+        IEnumerable<OrderDTO> GetAll();
+
         IEnumerable<OrderDTO> GetUserOrders(string UserName);
 
         OrderDTO GetOrderById(int id);

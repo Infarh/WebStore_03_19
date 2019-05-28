@@ -18,6 +18,8 @@ namespace WebStore.Clients.Orders
 
         public IEnumerable<OrderDTO> GetUserOrders(string UserName) => Get<List<OrderDTO>>($"{ServiceAddress}/user/{UserName}");
 
+        public IEnumerable<OrderDTO> GetAll() => Get<List<OrderDTO>>($"{ServiceAddress}");
+
         public OrderDTO GetOrderById(int id) => Get<OrderDTO>($"{ServiceAddress}/{id}");
 
         public OrderDTO CreateOrder(CreateOrderModel OrderModel, string UserName)

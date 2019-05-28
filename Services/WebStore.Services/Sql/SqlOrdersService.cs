@@ -25,6 +25,25 @@ namespace WebStore.Services.Sql
             _Logger = Logger;
         }
 
+        public IEnumerable<OrderDTO> GetAll() =>
+            _db.Orders
+               .Select(order => new OrderDTO
+                {
+                    Id = order.Id,
+                    Name = order.Name,
+                    Phone = order.Phone,
+                    Address = order.Address,
+                    Date = order.Date,
+                    OrderItems = order.OrderItems.Select(item => new OrderItemDTO
+                        {
+                            Id = item.Id,
+                            Price = item.Price,
+                            Quantity = item.Quantity
+                        })
+                       .ToArray()
+                })
+               .ToArray();
+
         public IEnumerable<OrderDTO> GetUserOrders(string UserName) =>
             _db.Orders
                 .Include(order => order.User)

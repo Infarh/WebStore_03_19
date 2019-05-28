@@ -22,7 +22,7 @@ namespace WebStore.ServiceHosting.Controllers
 
         public RolesController(WebStoreContext db) => _RoleStore = new RoleStore<IdentityRole>(db);
 
-        [HttpGet("AllRoles")]
+        [HttpGet("Get")]
         public async Task<IEnumerable<IdentityRole>> GetAllRoles() => await _RoleStore.Roles.ToArrayAsync();
 
         [HttpPost]

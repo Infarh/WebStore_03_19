@@ -22,7 +22,7 @@ namespace WebStore.ServiceHosting.Controllers
 
         public UsersController(WebStoreContext db) => _UserStore = new UserStore<User>(db);
 
-        [HttpGet("AllUsers")]
+        [HttpGet("Get")]
         public async Task<IEnumerable<User>> GetAllUsers() => await _UserStore.Users.ToArrayAsync();
 
         [HttpPost("UserId")]
