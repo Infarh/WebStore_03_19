@@ -15,5 +15,7 @@ namespace WebStore.Domain.DTO
         public decimal Price { get; set; }
 
         public BrandDTO Brand { get; set; }
+
+        public SectionDTO Section { get; set; }
     }
 }

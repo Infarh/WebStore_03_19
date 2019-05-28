@@ -17,7 +17,11 @@ namespace WebStore.Services.Sql
 
         public IEnumerable<Section> GetSections() => _db.Sections.ToArray();
 
+        public Section GetSectionById(int id) => _db.Sections.FirstOrDefault(section => section.Id == id);
+
         public IEnumerable<Brand> GetBrands() => _db.Brands.ToArray();
+
+        public Brand GetBrandById(int id) => _db.Brands.FirstOrDefault(brand => brand.Id == id);
 
         public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
         {
