@@ -39,6 +39,6 @@
     }
 }
 
-@await Component.InvokeAsync("BreadCrumbs", new { type, id, from_type })
+@await Component.InvokeAsync("BreadCrumbs", new { Type = type, id, FromType = from_type })
 
 @RenderBody()

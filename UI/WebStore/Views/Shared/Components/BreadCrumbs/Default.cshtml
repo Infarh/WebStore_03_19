@@ -3,8 +3,8 @@
 
 <div class="breadcrumbs">
     <ol class="breadcrumb">
-        <li><a href="#">Home</a></li>
-        <li class="active">Каталог</li>
+        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li><a asp-controller="Catalog" asp-action="Shop">Каталог</a></li>
         @foreach (var item in Model)
         {
             switch (item.BreadCrumbsType)
