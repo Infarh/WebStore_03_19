@@ -1,4 +1,5 @@
-﻿using WebStore.Domain.Entities;
+﻿using WebStore.Domain.DTO;
+using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 
 namespace WebStore.Services.Map
@@ -31,5 +32,17 @@ namespace WebStore.Services.Map
             model.CopyTo(section);
             return section;
         }
+
+        public static SectionDTO ToDTO(this Section section) => section is null ? null : new SectionDTO
+        {
+            Id = section.Id,
+            Name = section.Name
+        };
+
+        public static Section FromDTO(this SectionDTO section) => section is null ? null : new Section
+        {
+            Id = section.Id,
+            Name = section.Name
+        };
     }
 }

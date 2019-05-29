@@ -13,15 +13,18 @@ namespace WebStore.Components
     {
         private readonly IProductData _ProductData;
 
-        public BrandsViewComponent(IProductData ProductData)
-        {
-            _ProductData = ProductData;
-        }
+        public BrandsViewComponent(IProductData ProductData) => _ProductData = ProductData;
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string BrandId)
         {
+            var brand_id = int.TryParse(BrandId, out var id) ? id : (int?) null;
+
             var brands = GetBrands();
-            return View(brands);
+            return View(new BrandCompleteViewModel
+            {
+                Brands = brands,
+                CurrentBrandId = brand_id
+            });
         }
 
         private IEnumerable<BrandViewModel> GetBrands()
