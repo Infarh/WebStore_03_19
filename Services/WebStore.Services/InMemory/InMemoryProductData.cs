@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WebStore.Domain.DTO;
+using WebStore.Domain.DTO.Product;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Servcies;
 using WebStore.Services.Data;
@@ -22,7 +23,7 @@ namespace WebStore.Services.InMemory
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
+        public PagedProductDTO GetProducts(ProductFilter Filter)
         {
             IEnumerable<Product> products = TestData.Products;
 
@@ -31,7 +32,18 @@ namespace WebStore.Services.InMemory
             if (Filter?.SectionId != null)
                 products = products.Where(product => product.SectionId == Filter.SectionId);
 
-            return products.Select(ProductsMapper.ToDTO); 
+            var total_count = products.Count();
+
+            if (Filter?.PageSize != null)
+                products = products
+                   .Skip((Filter.Page - 1) * (int) Filter.PageSize)
+                   .Take((int) Filter.PageSize);
+
+            return new PagedProductDTO
+            {
+                Products = products.Select(ProductsMapper.ToDTO),
+                TotalCount = total_count
+            }; 
         }
 
         public ProductDTO GetProductById(int id) => 
