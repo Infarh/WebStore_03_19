@@ -58,6 +58,7 @@
     $(function() {
         Cart.init({
             addToCartLink: "@Url.Action("AddToCartAJAX","Cart")",
+            decrementLink: "@Url.Action("DecrementFromCartAJAX","Cart")",
             removeFromCartLink: "@Url.Action("RemoveFromCartAJAX","Cart")",
             getCartViewLink: "@Url.Action("GetCartView","Cart")"
         });
