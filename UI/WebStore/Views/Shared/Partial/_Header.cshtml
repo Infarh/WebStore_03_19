@@ -57,6 +57,10 @@
                             </ul>
                         </div>*@
                     </div>
+                    <div class="pull-right" id="cartContainer">
+                        @*@await Component.InvokeAsync("Cart")*@
+                        <vc:cart/>
+                    </div>
                 </div>
                 <div class="col-sm-8">
                     @*@await Component.InvokeAsync("UserInfo")*@

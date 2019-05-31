@@ -33,10 +33,30 @@ namespace WebStore.Controllers
             return View(model);
         }
 
+        public IActionResult GetCartView() => ViewComponent("Cart");
+
+        public IActionResult AddToCart(int id)
+        {
+            _CartService.AddToCart(id);
+            return RedirectToAction("Details");
+        }
+
+        public IActionResult AddToCartAJAX(int id)
+        {
+            _CartService.AddToCart(id);
+            return Json(new { id, message = $"Товар {id} добавлен к корзине" });
+        }
+
         public IActionResult DecrementFromCart(int id)
         {
             _CartService.DecrementFromCart(id);
             return RedirectToAction("Details");
+        }
+
+        public IActionResult DecrementFromCartAJAX(int id)
+        {
+            _CartService.DecrementFromCart(id);
+            return Json(new { id, message = $"Количество товара {id} в корзине уменьшено на 1" });
         }
 
         public IActionResult RemoveFromCart(int id)
@@ -45,16 +65,22 @@ namespace WebStore.Controllers
             return RedirectToAction("Details");
         }
 
+        public IActionResult RemoveFromCartAJAX(int id)
+        {
+            _CartService.DecrementFromCart(id);
+            return Json(new { id, message = $"Товар {id} удалён из корзины" });
+        }
+
         public IActionResult RemoveAll()
         {
             _CartService.RemoveAll();
             return RedirectToAction("Details");
         }
 
-        public IActionResult AddToCart(int id)
+        public IActionResult RemoveAllAJAX()
         {
-            _CartService.AddToCart(id);
-            return RedirectToAction("Details");
+            _CartService.RemoveAll();
+            return Json(new { message = "Корзина очищена" });
         }
 
         [HttpPost, ValidateAntiForgeryToken]
