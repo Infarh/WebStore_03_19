@@ -84,15 +84,19 @@ namespace WebStore.Services
                 Order = p.Order,
                 Price = p.Price,
                 ImageUrl = p.ImageUrl,
-                Brand = p.Brand?.Name
-            });
+                Brand = p.Brand?.Name ?? string.Empty
+            }) ?? throw new InvalidOperationException("Неудалось получить набор моделей товаров");
 
-            return new CartViewModel
+            var items = new Dictionary<ProductViewModel, int>();
+            foreach (var item in _CartStore.Cart.Items)
             {
-                Items = _CartStore.Cart.Items.ToDictionary(
-                    x => products_view_models.First(p => p.Id == x.ProductId), 
-                    x => x.Quantity)
-            };
+                var model = products_view_models.FirstOrDefault(p => p.Id == item.ProductId);
+                if(model is null)
+                    continue;
+                items[model] = item.Quantity;
+            }
+
+            return new CartViewModel { Items = items };
 
         }
     }
