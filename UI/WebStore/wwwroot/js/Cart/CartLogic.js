@@ -1,6 +1,7 @@
 ﻿Cart = {
 	_properties: {
 		addToCartLink: "",
+		removeFromCartLink: "",
 		getCartViewLink: ""
 	},
 
@@ -8,12 +9,13 @@
 	{
 		$.extend(Cart._properties, properties);
 
-		Cart.initAddToCart();
+		Cart.initEvent();
 	},
 
-	initAddToCart: function ()
+	initEvent: function ()
 	{
 		$("a.CallAddToCart").click(Cart.addToCart);
+		$(".cart_quantity_delete").click(Cart.removeFromCart);
 	},
 
 	addToCart: function (event)
@@ -45,5 +47,20 @@
 		$.get(Cart._properties.getCartViewLink)
 			.done(function (result) { container.html(result); })
 			.fail(function () { console.log("refreshCartView error"); });
+	},
+
+	removeFromCart: function(event) {
+		var button = $(this);
+
+		event.preventDefault();
+
+		var id = button.data("id");
+
+		$.get(Cart._properties.removeFromCartLink + "/" + id)
+			.done(function() {
+				button.closest("tr").remove();
+				Cart.refreshCartView();
+			})
+			.fail(function () { console.log("removeFromCart error");});
 	}
 };

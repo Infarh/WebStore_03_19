@@ -67,7 +67,7 @@ namespace WebStore.Controllers
 
         public IActionResult RemoveFromCartAJAX(int id)
         {
-            _CartService.DecrementFromCart(id);
+            _CartService.RemoveFromCart(id);
             return Json(new { id, message = $"Товар {id} удалён из корзины" });
         }
 
