@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using WebStore.Domain.Entities.Base.Interfaces;
+﻿using WebStore.Domain.Entities.Base.Interfaces;
 
 namespace WebStore.Domain.ViewModels
 {
@@ -16,13 +15,5 @@ namespace WebStore.Domain.ViewModels
         public decimal Price { get; set; }
 
         public string Brand { get; set; }
-    }
-
-    public class CatalogViewModel
-    {
-        public int? BrandId { get; set; }
-        public int? SectionId { get; set; }
-
-        public IEnumerable<ProductViewModel> Products { get; set; }
     }
 }

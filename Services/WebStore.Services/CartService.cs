@@ -27,15 +27,12 @@ namespace WebStore.Services
             var cart = _CartStore.Cart;
 
             var item = cart.Items.FirstOrDefault(i => i.ProductId == id);
-            if (item != null)
-            {
-                if (item.Quantity > 0)
-                    item.Quantity--;
-                if (item.Quantity == 0)
-                    cart.Items.Remove(item);
+            if (item is null) return;
 
-                _CartStore.Cart = cart;
-            }
+            if (item.Quantity > 0) item.Quantity--;
+            if (item.Quantity == 0) cart.Items.Remove(item);
+
+            _CartStore.Cart = cart;
         }
 
         public void RemoveFromCart(int id)
@@ -44,11 +41,10 @@ namespace WebStore.Services
 
             var item = cart.Items.FirstOrDefault(i => i.ProductId == id);
 
-            if (item != null)
-            {
-                cart.Items.Remove(item);
-                _CartStore.Cart = cart;
-            }
+            if (item is null) return;
+
+            cart.Items.Remove(item);
+            _CartStore.Cart = cart;
         }
 
         public void RemoveAll()
@@ -77,7 +73,7 @@ namespace WebStore.Services
                 Ids = _CartStore.Cart.Items.Select(item => item.ProductId).ToList()
             });
 
-            var products_view_models = products.Select(p => new ProductViewModel
+            var products_view_models = products.Products.Select(p => new ProductViewModel
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -85,7 +81,7 @@ namespace WebStore.Services
                 Price = p.Price,
                 ImageUrl = p.ImageUrl,
                 Brand = p.Brand?.Name ?? string.Empty
-            }) ?? throw new InvalidOperationException("Неудалось получить набор моделей товаров");
+            }).ToArray();
 
             var items = new Dictionary<ProductViewModel, int>();
             foreach (var item in _CartStore.Cart.Items)

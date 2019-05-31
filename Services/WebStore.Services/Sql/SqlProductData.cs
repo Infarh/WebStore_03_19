@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
 using WebStore.Domain.DTO;
+using WebStore.Domain.DTO.Product;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Servcies;
 using WebStore.Services.Map;
@@ -23,7 +24,7 @@ namespace WebStore.Services.Sql
 
         public Brand GetBrandById(int id) => _db.Brands.FirstOrDefault(brand => brand.Id == id);
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
+        public PagedProductDTO GetProducts(ProductFilter Filter)
         {
             IQueryable<Product> products = _db.Products;
             if (Filter?.SectionId != null)
@@ -32,7 +33,18 @@ namespace WebStore.Services.Sql
             if (Filter?.BrandId != null)
                 products = products.Where(product => product.BrandId == Filter.BrandId);
 
-            return products.AsEnumerable().Select(ProductsMapper.ToDTO).ToArray();
+            var total_count = products.Count();
+
+            if (Filter?.PageSize != null)
+                products = products
+                   .Skip((Filter.Page - 1) * (int) Filter.PageSize)
+                   .Take((int) Filter.PageSize);
+
+            return new PagedProductDTO
+            {
+                Products = products.AsEnumerable().Select(ProductsMapper.ToDTO).ToArray(),
+                TotalCount = total_count
+            };
         }
 
         public ProductDTO GetProductById(int id) =>
