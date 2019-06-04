@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -16,18 +10,12 @@ using WebStore.Clients.Orders;
 using WebStore.Clients.Products;
 using WebStore.Clients.Users;
 using WebStore.Clients.Values;
-using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
-using WebStore.Domain.Models;
-using WebStore.Infrastructure.Conventions;
-using WebStore.Infrastructure.Filters;
-using WebStore.Services;
+using WebStore.Hubs;
 using WebStore.Interfaces.Api;
 using WebStore.Interfaces.Servcies;
 using WebStore.Logger;
-using WebStore.Services.Data;
-using WebStore.Services.InMemory;
-using WebStore.Services.Sql;
+using WebStore.Services;
 
 namespace WebStore
 {
@@ -40,6 +28,8 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddSingleton<IEmployeesData, EmployeesClient>();
             services.AddScoped<IProductData, ProductsClient>();
             services.AddScoped<ICartService, CartService>();
@@ -130,6 +120,8 @@ namespace WebStore
             //app.UseWelcomePage("/Welcome");
 
             app.UseAuthentication();
+
+            app.UseSignalR(routes => routes.MapHub<InformationHub>("/info"));
 
             //app.UseMvcWithDefaultRoute(); // "default" : "{controller=Home}/{action=Index}/{id?}"
             app.UseMvc(route =>
