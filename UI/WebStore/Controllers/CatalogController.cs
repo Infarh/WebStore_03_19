@@ -13,6 +13,8 @@ namespace WebStore.Controllers
 {
     public class CatalogController : Controller
     {
+        private const string PageSize = "PageSize";
+
         private readonly IProductData _ProductData;
         private readonly IConfiguration _Configuration;
 
@@ -24,7 +26,7 @@ namespace WebStore.Controllers
 
         public IActionResult Shop(int? SectionId, int? BrandId, int Page = 1)
         {
-            var page_size = int.Parse(_Configuration["PageSize"]);
+            var page_size = int.Parse(_Configuration[PageSize]);
 
             var products = _ProductData.GetProducts(new ProductFilter
             {
@@ -62,6 +64,32 @@ namespace WebStore.Controllers
             };
 
             return View(catalog_model);
+        }
+
+        public IActionResult GetFiltredItems(int? SectionId, int? BrandId, int Page = 1)
+        {
+            var products = GetProducts(SectionId, BrandId, Page);
+            return PartialView("Partial/_FeaturesItems", products);
+        }
+
+        private IEnumerable<ProductViewModel> GetProducts(int? SectionId, int? BrandId, int Page = 1)
+        {
+            var products_model = _ProductData.GetProducts(new ProductFilter
+            {
+                SectionId = SectionId,
+                BrandId = BrandId,
+                Page = Page,
+                PageSize = int.Parse(_Configuration[PageSize])
+            });
+            return products_model.Products.Select(p => new ProductViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand?.Name ?? string.Empty
+            });
         }
 
         public IActionResult ProductDetails(int id)
