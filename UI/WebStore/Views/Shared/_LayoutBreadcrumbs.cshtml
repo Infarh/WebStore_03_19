@@ -42,3 +42,7 @@
 @await Component.InvokeAsync("BreadCrumbs", new { Type = type, id, FromType = from_type })
 
 @RenderBody()
+
+@section scripts{ 
+    @RenderSection("scripts", false)
+}
